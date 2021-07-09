@@ -16,9 +16,10 @@ const $messages = document.querySelector('#messages')
 // templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 socket.on('msg', (msg) => {
-    // console.log(msg)
+    console.log(msg)
     const html = Mustache.render(messageTemplate, {
-        msg
+        msg : msg.text,
+        created_at: moment(msg.created_at).fromNow()
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
@@ -38,7 +39,7 @@ $messageForm.addEventListener('submit', (e) => {
 
         //enable
         $messageFomBtn.removeAttribute('disabled')
-            // clr input
+        // clr input
         $messageFomInput.value = ''
         $messageFomInput.focus()
         if (e) console.log(e)
@@ -54,7 +55,7 @@ $sndLocationBtn.addEventListener('click', () => {
     }
     navigator.geolocation.getCurrentPosition((pos) => {
         console.log(pos.coords)
-        socket.emit('loc', {
+        socket.emit('Locmsg', {
             lat: pos.coords.latitude,
             lon: pos.coords.longitude
         }, () => {
@@ -62,4 +63,14 @@ $sndLocationBtn.addEventListener('click', () => {
         })
         $sndLocationBtn.removeAttribute('disabled')
     })
+})
+
+const locTemplate = document.querySelector('#location-template').innerHTML
+socket.on('Locmsg', (msg) => {
+    console.log('hi ', msg)
+    const html = Mustache.render(locTemplate, {
+        url:msg.url,
+        created_at: moment(msg.created_at).format('h:mm a')
+    })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
