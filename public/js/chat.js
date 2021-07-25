@@ -13,6 +13,10 @@ const socket = io()
 
 const $messages = document.querySelector('#messages')
 
+// options
+const {username, room } = Qs.parse(window.location.search, {ignoreQueryPrefix:true})
+
+console.log(username)
 // templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 socket.on('msg', (msg) => {
@@ -21,6 +25,7 @@ socket.on('msg', (msg) => {
         msg : msg.text,
         created_at: moment(msg.created_at).fromNow()
     })
+    // console.log(typeof(html))
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
@@ -74,3 +79,5 @@ socket.on('Locmsg', (msg) => {
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
+
+socket.emit('join', {username, room})

@@ -37,13 +37,23 @@ io.on('connection', (socket) => { // socket is an obj about the connection
         callback()
     })
 
+    // socket.emit, io.emit, socket.broadcast.emit -> u know these already
+    //io.to.emit socket.broadcas.to.emit -> these for room
+
+    socket.on('join', ({username, room})=>{
+        socket.join(room)
+        // console.log(room)
+        socket.emit('msg', genMsg('Welcome!'))
+        socket.broadcast.to(room).emit('msg', genMsg(` ${room} has joined`))
+    })
+
     socket.broadcast.emit('msg', genMsg('Welcome'))
     socket.on('newMsg', (msg, callback) => {
         const filter = new Filter()
         if (filter.isProfane(msg)) {
             return callback('khisti ka k dichhis bara? ')
         }
-        io.emit('msg',  genMsg(msg))
+        io.to('123').emit('msg',  genMsg(msg))
         callback() // this acknowledgement is helpful for 
             // validation like filtering offensive word
     })
