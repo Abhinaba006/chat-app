@@ -14,13 +14,14 @@ const addUser = ({id, userName, room})=>{
     }
 
     // check for existing user
-
     const exsistingUser = user.find((u)=>{
-        return u.room === room && u.userName === name
+        return u.room === room && u.userName === userName
     })
 
     // validate user name
     if(exsistingUser){
+
+        // console.log('error find')
         return {
             error:'user name exsits'
         }
@@ -29,20 +30,69 @@ const addUser = ({id, userName, room})=>{
     // store user
     const u = { id, userName, room}
     user.push(u)
-    return { user } 
+    return { u } 
+
+}
+
+// remove user
+const removeUser = (id)=>{
+    const idx = user.findIndex((u)=> u.id===id)
+
+    if(idx!==-1){
+        return user.splice(idx, 1)[0]
+    }
+}
+
+// get user
+
+const getUser = (id)=>{
+
+    const u = user.find((u)=>u.id===id)
+
+    if(!u)
+        return {error:'user not found'}
+
+    return u
+}
+
+// get user in a room
+
+const getUserinRoom = (room)=>{
+    const res = user.filter((u)=> u.room==room)
+
+    if(!res)    return  {error:'user not found'}
+
+    return res
 
 }
 
 addUser({
     id:69,
-    userName:'john',
+    userName:' JOhn',
     room:'123'
 })
 
-console.log(user)
 
-// remove user
+const res = addUser({
+        id:33,
+        userName:'joaaaaaaaaaaaaaaaan',
+        room:'123z'
+    })
 
-// get user
+// console.log(res)
 
-// get user in a room
+// const removedUser = removeUser(69)
+
+// console.log(removedUser)
+// console.log(user)
+
+// console.log(getUser(69))
+
+console.log(getUserinRoom('123'))
+
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUserinRoom
+}

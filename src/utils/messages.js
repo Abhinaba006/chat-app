@@ -1,5 +1,7 @@
-const genMsg = (text) => {
+const genMsg = (text, user) => {
+    console.log('user')
     return {
+        user,
         text,
         created_at: new Date().getTime()
     }
